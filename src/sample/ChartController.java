@@ -8,8 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import model.Changer;
 import model.Network;
 import model.TestData;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 
 /**
  * Created by qwerty on 29-Nov-17.
@@ -45,11 +50,12 @@ public class ChartController {
     private int tmp=0;
     private boolean ready=false;
 
-    private int N = 20;
+    private int N = 10;
     private StringBuilder stringBuilder = new StringBuilder("");
 
     @FXML
     public void initialize() {
+        Changer changer = new Changer();
         chart.setTitle("Wykres bledu");
         XYChart.Series series = new XYChart.Series();
         series.setName("Seria 1");
@@ -64,9 +70,7 @@ public class ChartController {
                 //series.getData().add(new XYChart.Data(5,5));
                 if(ready)
                 {
-                    int numberoftrainings = 5000;
-                    double whatIgot=0;
-                    double whatiwant =0;
+                    int numberoftrainings = 90000;
                     Network network = new Network(number_of_layers,number_of_neurons_in_layer,2);
                     TestData[] testData = new TestData[N];
                     for(int i=0;i<N;i++)
@@ -75,20 +79,42 @@ public class ChartController {
                     }
                     for(int j=0;j<numberoftrainings;j++) {
                         for (int i = 0; i < N; i++) {
-                            network.train(testData[i].getTab(), testData[i].getResult());
-                            //whatIgot = network.guess(testData[i].getTab());
-                            //whatiwant = testData[i].getResult();
-                            //series.getData().add(new XYChart.Data(whatIgot, whatiwant));
+                            network.train(testData[i].getTab(), changer.from_normal_to_01(testData[i].getResult()));
                         }
                     }
                     for(int i=0;i<N;i++) {
                         System.out.println("Co mialo wyjsc: " + testData[i].getResult());
-                        System.out.println("Co wyszlo: " + network.guess(testData[i].getTab()));
-                        series.getData().add(new XYChart.Data(testData[i].getResult(), network.guess(testData[i].getTab())));
+                        System.out.println("Co wyszlo: " + changer.from_01_to_normal(network.guess(testData[i].getTab())));
+                        series.getData().add(new XYChart.Data(testData[i].getResult(), changer.from_01_to_normal(network.guess(testData[i].getTab()))));
                     }
 
 
                 }
+
+                /*Changer changer = new Changer();
+                ArrayList<Double> collection = new ArrayList<Double>();
+                for(double i=-2;i<2.001;i+=0.001)
+                {
+                    for(double j=-2;j<2.001;j+=0.001)
+                    {
+                        TestData testData = new TestData(i,j);
+                        collection.add(changer.from_normal_to_01(testData.getResult()));
+                    }
+                }
+
+                collection.sort(new Comparator<Double>() {
+                    @Override
+                    public int compare(Double o1, Double o2) {
+                        if(o1>o2)
+                        {
+                            return 1;
+                        }
+                        return -1;
+                    }
+                });
+                System.out.println("Min element: " + changer.from_01_to_normal(collection.get(0)));
+                System.out.println("Max element " + changer.from_01_to_normal(collection.get(collection.size()-1)));
+*/
             }
         });
 

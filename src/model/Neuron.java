@@ -109,8 +109,8 @@ public class Neuron {
     public void train(double[] input, Integer target)
     {
 
-        //double guess =guess(input);
-        //double error = target - guess;
+        double guess =guess(input);
+        double error = target - guess;
 
         for(int i=0;i<weights.length;i++)
         {

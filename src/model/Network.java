@@ -24,20 +24,20 @@ public class Network {
         }
 
         //najpierw inicjuje warstwe 1 gdyz nie odwoluje sie ona do warstw poprzednich
-        for(int i=0;i<number_of_neurons_in_layer[0];i++)    //petla po warstwach
+        for(int i=0;i<number_of_neurons_in_layer[0];i++)    //petla po neuronach w 1 warstwie
         {
             layers[0][i]=new Neuron(number_of_inputs);  //wejsciami do neuronu sa wejscia do sieci
         }
 
         //nastepnie kolejne warstwy
-        for(int i=1;i<number_of_layers-1;i++)    //petla po warstwach
+        for(int i=1;i<number_of_layers;i++)    //petla po warstwach
         {
             for(int j=0;j<number_of_neurons_in_layer[i];j++) {  //petla po neuronach w warstwie
                 layers[i][j] = new Neuron(number_of_neurons_in_layer[i-1]); //wejsciami do neuronu sa neurony poprzedniej warstwy
             }
         }
 
-        //Dla ostatniej warstwy
+/*        //Dla ostatniej warstwy
         for(int j=0;j<number_of_neurons_in_layer[number_of_layers-1];j++) {  //petla po neuronach w ostatniej warstwie
             if(number_of_layers-1==0)
             {
@@ -46,12 +46,19 @@ public class Network {
             else {
                 layers[number_of_layers - 1][j] = new Neuron_linear(number_of_neurons_in_layer[number_of_layers - 2]); //neuron z inna funkcja aktywacyjna
             }
-        }
+        }*/
 
     }
 
     public double guess(double[] input)
     {
+/*        //normalizacja wejsc
+        Changer changer = new Changer();
+        for(int i=0;i<input.length;i++)
+        {
+            input[i]=changer.from_normal_to_01(input[i]);
+        }*/
+
         //tworzenie tablicy pomocniczej
         double[][] help_tab=new double[number_of_layers][];
         for(int i=0;i<number_of_layers;i++) {
@@ -79,6 +86,7 @@ public class Network {
 
     public void train(double[] input,double target)
     {
+
         //tworzenie tablicy pomocniczej
         double[][] help_tab=new double[number_of_layers][];
         for(int i=0;i<number_of_layers;i++) {
@@ -100,7 +108,7 @@ public class Network {
             }
         }
 
-        //wyliczanie errora TODO zerowanie errora
+        //wyliczanie errora
 
         double error = target-guess(input);
         layers[number_of_layers-1][0].setError(error);
