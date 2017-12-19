@@ -48,7 +48,7 @@ public class TrainingTask implements Runnable {
                 result=0;
 
                 helper++;
-                if(helper==5000) {
+                if(helper==500) {
 /*                    try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

@@ -51,7 +51,7 @@ public class ChartController {
     private int tmp=0;
     private boolean ready=false;
 
-    private int N = 25;
+    private int N = 4000;    //30 20 1 dla 100N, 30 20 dla 4000N
     private StringBuilder stringBuilder = new StringBuilder("");
 
     @FXML
