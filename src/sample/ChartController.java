@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import model.Changer;
 import model.Network;
 import model.TestData;
+import model.TrainingTask;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +51,7 @@ public class ChartController {
     private int tmp=0;
     private boolean ready=false;
 
-    private int N = 10;
+    private int N = 25;
     private StringBuilder stringBuilder = new StringBuilder("");
 
     @FXML
@@ -68,7 +69,12 @@ public class ChartController {
             @Override
             public void handle(ActionEvent event) {
                 //series.getData().add(new XYChart.Data(5,5));
-                if(ready)
+
+                if(ready) {
+                    TrainingTask treiningTask = new TrainingTask(N, number_of_layers, number_of_neurons_in_layer, changer,series);
+                    new Thread(treiningTask).start();
+                }
+/*                if(ready)
                 {
                     int numberoftrainings = 90000;
                     Network network = new Network(number_of_layers,number_of_neurons_in_layer,2);
@@ -77,16 +83,29 @@ public class ChartController {
                     {
                         testData[i]=new TestData();
                     }
-                    for(int j=0;j<numberoftrainings;j++) {
+
+                    Integer result =0;
+                    int trening_counter =0;
+                    for(;;) {
+                        trening_counter++;
                         for (int i = 0; i < N; i++) {
-                            network.train(testData[i].getTab(), changer.from_normal_to_01(testData[i].getResult()));
+                            result+=network.train(testData[i].getTab(), changer.from_normal_to_01(testData[i].getResult()));
                         }
+                        if(result==N)
+                        {
+                            break;
+                        }
+                        result=0;
+
                     }
+
+                    System.out.println("Nauczono w " + trening_counter + " treningach");
                     for(int i=0;i<N;i++) {
+
                         System.out.println("Co mialo wyjsc: " + testData[i].getResult());
                         System.out.println("Co wyszlo: " + changer.from_01_to_normal(network.guess(testData[i].getTab())));
                         series.getData().add(new XYChart.Data(testData[i].getResult(), changer.from_01_to_normal(network.guess(testData[i].getTab()))));
-                    }
+                    }*/
 
 
                 }
@@ -114,8 +133,9 @@ public class ChartController {
                 });
                 System.out.println("Min element: " + changer.from_01_to_normal(collection.get(0)));
                 System.out.println("Max element " + changer.from_01_to_normal(collection.get(collection.size()-1)));
-*/
+
             }
+            */
         });
 
         confirm.setOnAction(new EventHandler<ActionEvent>() {

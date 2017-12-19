@@ -84,8 +84,17 @@ public class Network {
     }
 
 
-    public void train(double[] input,double target)
+    public int train(double[] input,double target)  //zwraca 1 jesli trening niepotrzebny inaczej 0
     {
+
+        //wyjscie jesli error jest maly
+        double error = target-guess(input);
+        //System.out.println(error);
+        if(Math.abs(error)<0.01)
+        {
+            return 1;
+        }
+
 
         //tworzenie tablicy pomocniczej
         double[][] help_tab=new double[number_of_layers][];
@@ -110,7 +119,6 @@ public class Network {
 
         //wyliczanie errora
 
-        double error = target-guess(input);
         layers[number_of_layers-1][0].setError(error);
 
         for(int i=number_of_layers-2;i>-1;i--)
@@ -161,6 +169,8 @@ public class Network {
                     layers[i][j].setError(0);
             }
         }
+
+        return 0;
 
     }
 }
